@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'auth:sanctum'], function (){
+Route::group([], function (){
     Route::group(['prefix' => 'questions'],
         function (){
             Route::get('/', [\App\Http\Controllers\Api\QuestionsController::class, 'getQuestions']);
