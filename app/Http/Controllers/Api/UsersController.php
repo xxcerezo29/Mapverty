@@ -7,6 +7,7 @@ use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Nette\Utils\Random;
 
@@ -43,6 +44,8 @@ class UsersController extends Controller
 
         try {
 
+            DB::beginTransaction();
+
             $random_password = Random::generate(8);
 
             $user = User::create([
@@ -57,11 +60,14 @@ class UsersController extends Controller
 
             $user->assignRole($request->role);
 
+            DB::commit();
+
             return response()->json([
                 'message' => 'User successfully created!',
                 'user' => $user
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => $e->getMessage(),
             ]);
