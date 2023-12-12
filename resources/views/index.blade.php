@@ -7,10 +7,10 @@
 
 @section('content')
     <div class="row">
-            <x-small-box-component id="small-box-1" color="info" icon="fa fa-users" title="Total Students" text="100" />
-            <x-small-box-component id="small-box-2" color="success" icon="fa fa-users" title="Total Respondent" text="100" />
-            <x-small-box-component id="small-box-3" color="warning" icon="fa fa-users" title="Total Poverty Index" text="100" />
-            <x-small-box-component id="small-box-4" color="danger" icon="fa fa-users" title="Total First Generation Student" text="100" />
+            <x-small-box-component id="small-box-1" color="info" icon="fa fa-users" title="Total Students" text="{{$studentsCount}}" />
+            <x-small-box-component id="small-box-2" color="success" icon="fa fa-users" title="Total Respondent" text="{{$respondent}}" />
+            <x-small-box-component id="small-box-3" color="warning" icon="fa fa-signal" title="Total Poverty Index" text="{{$povertyindex}}%" />
+            <x-small-box-component id="small-box-4" color="danger" icon="fa fa-users" title="Total First Generation Student" text="{{$firstGeneration}}" />
     </div>
 
     <div class="row">
