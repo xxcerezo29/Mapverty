@@ -121,36 +121,49 @@
                     }
                 });
 
-                $.ajax({
-                    url: '/api/survey/verifyChangeEmail',
-                    type: 'POST',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then((result) => {
-                                if (data.status === 'success') {
-                                    location.reload();
-                                }
-                            }
-                        );
-                    },
-                    error: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.responseJSON.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are checking your information',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                        Swal.showLoading();
                     }
-                });
+                }).then(
+                    $.ajax({
+                        url: '/api/survey/verifyChangeEmail',
+                        type: 'POST',
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+                                    if (data.status === 'success') {
+                                        location.reload();
+                                    }
+                                }
+                            );
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.responseJSON.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    })
+                )
             })
 
             submitBTN.on('click', function (e){
@@ -166,38 +179,52 @@
                         'X-CSRF-TOKEN': token
                     }
                 });
-                $.ajax({
-                    url: '/api/survey/verifyChangeEmail',
-                    type: 'GET',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then((result) => {
-                                if (data.status === 'success') {
-                                    $('#verifyEmail').modal('show')
-                                }
-                            }
-                        );
-
-
-                    },
-                    error: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.responseJSON.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are checking your information',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                        Swal.showLoading();
                     }
-                });
+                }).then(
+                    $.ajax({
+                        url: '/api/survey/verifyChangeEmail',
+                        type: 'GET',
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+                                    if (data.status === 'success') {
+                                        $('#verifyEmail').modal('show')
+                                    }
+                                }
+                            );
+
+
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.responseJSON.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    })
+                )
+
             })
 
             function checkInputs(){

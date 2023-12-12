@@ -121,36 +121,49 @@
                         'X-CSRF-TOKEN': token
                     }
                 });
-                $.ajax({
-                    url: '/api/questions/'+question.id,
-                    type: 'PUT',
-                    data: {
-                        question: $('#question-input').val(),
-                        type: $('#type-input').val()
-                    },
-                    success: function (data) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
-                            allowOutsideClick: false, // Disallow clicking outside the alert to close
-                            allowEscapeKey: false, // Disallow closing the alert with the escape key
-                            showCancelButton: false, // Hide the cancel button
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
-                        })
-                    },
-                    error: function (data) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong!',
-                        })
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are saving your changes',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                        Swal.showLoading();
                     }
-                })
+                }).then(
+                    $.ajax({
+                        url: '/api/questions/'+question.id,
+                        type: 'PUT',
+                        data: {
+                            question: $('#question-input').val(),
+                            type: $('#type-input').val()
+                        },
+                        success: function (data) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                allowOutsideClick: false, // Disallow clicking outside the alert to close
+                                allowEscapeKey: false, // Disallow closing the alert with the escape key
+                                showCancelButton: false, // Hide the cancel button
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        },
+                        error: function (data) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    })
+                )
             }
         })
     </script>

@@ -154,41 +154,55 @@
                         'X-CSRF-TOKEN': token
                     }
                 });
-                $.ajax({
-                    url: '/api/survey/verify-email',
-                    type: 'POST',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(
-                            $('#id-input').val({{$student->id}}),
-                            $('#student_number-input').val($('#student_number-main-input').val()),
-                            $('#email-input').val(emailInput.val()),
-                            $('#student_firstname-input').val(firstnameInput.val()),
-                            $('#student_middlename-input').val(middlenameInput.val()),
-                            $('#student_lastname-input').val(lastnameInput.val()),
-                            $('#verifyEmail').modal('show')
-                        );
-
-
-                    },
-                    error: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.responseJSON.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are checking your information',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                        Swal.showLoading();
                     }
-                });
+                }).then(
+                    $.ajax({
+                        url: '/api/survey/verify-email',
+                        type: 'POST',
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(
+                                $('#id-input').val({{$student->id}}),
+                                $('#student_number-input').val($('#student_number-main-input').val()),
+                                $('#email-input').val(emailInput.val()),
+                                $('#student_firstname-input').val(firstnameInput.val()),
+                                $('#student_middlename-input').val(middlenameInput.val()),
+                                $('#student_lastname-input').val(lastnameInput.val()),
+                                $('#verifyEmail').modal('show')
+                            );
+
+
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.responseJSON.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    })
+                );
+
             })
 
             function checkInputs(){
@@ -203,53 +217,6 @@
 
                 submitBTN.prop('disabled', !allFilled);
             }
-
-            {{--$('#submit_BTN').on('click', function (event) {--}}
-            {{--    event.preventDefault();--}}
-            {{--    var token = $('meta[name="csrf-token"]').attr('content');--}}
-            {{--    var data = {};--}}
-            {{--    data['id'] = {{$student->id}};--}}
-            {{--    data['student_number'] = $('#student_number-input').val();--}}
-            {{--    data['email'] = $('#email-input').val();--}}
-            {{--    data['student_firstname'] = $('#student_firstname-input').val();--}}
-            {{--    data['student_middlename'] = $('#student_middlename-input').val();--}}
-            {{--    data['student_lastname'] = $('#student_lastname-input').val();--}}
-            {{--    $.ajaxSetup({--}}
-            {{--        headers: {--}}
-            {{--            'X-CSRF-TOKEN': token--}}
-            {{--        }--}}
-            {{--    });--}}
-            {{--    $.ajax({--}}
-            {{--        url: '/api/survey/verify',--}}
-            {{--        type: 'POST',--}}
-            {{--        data: data,--}}
-            {{--        success: function (data) {--}}
-            {{--            console.log(data);--}}
-
-            {{--            Swal.fire({--}}
-            {{--                icon: 'success',--}}
-            {{--                title: data.title,--}}
-            {{--                text: data.message,--}}
-            {{--                confirmButtonText: 'Ok',--}}
-            {{--                timer: 1500--}}
-            {{--            }).then((result) => {--}}
-            {{--                if (result.isConfirmed) {--}}
-            {{--                    window.location.href = '/survey/otp?student_number='+data.student.student_number;--}}
-            {{--                }--}}
-            {{--            })--}}
-            {{--        },--}}
-            {{--        error: function (data) {--}}
-            {{--            console.log(data);--}}
-            {{--            Swal.fire({--}}
-            {{--                icon: 'error',--}}
-            {{--                title: data.title,--}}
-            {{--                text: data.responseJSON.message,--}}
-            {{--                showConfirmButton: false,--}}
-            {{--                timer: 1500--}}
-            {{--            });--}}
-            {{--        }--}}
-            {{--    });--}}
-            {{--});--}}
         });
     </script>
 @endpushonce

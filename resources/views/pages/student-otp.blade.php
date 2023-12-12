@@ -51,34 +51,47 @@
                         'X-CSRF-TOKEN': token
                     }
                 });
-                $.ajax({
-                    url: '/api/survey/verify-otp',
-                    type: 'POST',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then((result) => {
-                            window.location.href = '/survey/otp?student_number='+data.student.student_number;
-                        })
-                    },
-                    error: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.responseJSON.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are checking your information',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                        Swal.showLoading();
                     }
-                });
+                }).then(
+                    $.ajax({
+                        url: '/api/survey/verify-otp',
+                        type: 'POST',
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+                                window.location.href = '/survey/otp?student_number='+data.student.student_number;
+                            })
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.responseJSON.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    })
+                )
             });
         });
     </script>

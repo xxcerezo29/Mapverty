@@ -214,39 +214,52 @@
                     'X-CSRF-TOKEN': token
                 }
             });
-            $.ajax({
-                url: '/api/survey/email',
-                type: 'POST',
-                data: {
-
-                    'id' : '{{auth()->user()->id}}',
-                    'lrn' : '{{auth()->user()->lrn}}',
-                    'student_number' : '{{auth()->user()->student_number}}',
-                    'email' : email.val(),
-                },
-                success: function (data){
-                    Swal.fire({
-                        icon: 'success',
-                        title: data.title,
-                        text: data.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then((result) => {
-                        if(data.codeStatus === true){
-                            $('#verifyEmail').modal('show');
-                        }
-                    })
-                },
-                error: function (data){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: data.responseJSON.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+            Swal.fire({
+                title: 'Please Wait',
+                text: 'We are checking your information',
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                onOpen: () => {
+                    Swal.showLoading();
                 }
-            })
+            }).then(
+                $.ajax({
+                    url: '/api/survey/email',
+                    type: 'POST',
+                    data: {
+
+                        'id' : '{{auth()->user()->id}}',
+                        'lrn' : '{{auth()->user()->lrn}}',
+                        'student_number' : '{{auth()->user()->student_number}}',
+                        'email' : email.val(),
+                    },
+                    success: function (data){
+                        Swal.fire({
+                            icon: 'success',
+                            title: data.title,
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then((result) => {
+                            if(data.codeStatus === true){
+                                $('#verifyEmail').modal('show');
+                            }
+                        })
+                    },
+                    error: function (data){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.responseJSON.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                })
+            )
         }
         $(function (){
             var token = $('meta[name="csrf-token"]').attr('content');
@@ -297,40 +310,53 @@
                 data['code'] = $('#verify_code-input').val();
                 data['email'] = $('#email-input').val();
 
-                $.ajax({
-                    url: '/api/survey/otp',
-                    type: 'POST',
-                    data: data,
-                    success: function (data){
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then((result) =>{
-                                if(data.codeStatus === true){
-                                    $('#verifyEmail').modal('hide');
-                                    isEmailVerified = true;
-                                    emailVerifyBtn.prop('disabled', true);
-                                    emailVerifyBtn.html('Verified');
-                                    submitBtn.prop('disabled', false);
-                                }
-                            }
-                        )
-                    },
-                    error: function (data){
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.responseJSON.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are checking your information',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                    Swal.showLoading();
                     }
+                }).then(
+                    $.ajax({
+                        url: '/api/survey/otp',
+                        type: 'POST',
+                        data: data,
+                        success: function (data){
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) =>{
+                                    if(data.codeStatus === true){
+                                        $('#verifyEmail').modal('hide');
+                                        isEmailVerified = true;
+                                        emailVerifyBtn.prop('disabled', true);
+                                        emailVerifyBtn.html('Verified');
+                                        submitBtn.prop('disabled', false);
+                                    }
+                                }
+                            )
+                        },
+                        error: function (data){
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.responseJSON.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
 
-                })
+                    })
+                )
 
             })
 
@@ -376,52 +402,65 @@
                     }
                 });
 
-                $.ajax({
-                    url: '/api/survey',
-                    type: 'PUT',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are checking your information',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                        Swal.showLoading();
+                    }
+                }).then(
+                    $.ajax({
+                        url: '/api/survey',
+                        type: 'PUT',
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
-                            allowOutsideClick: false, // Disallow clicking outside the alert to close
-                            allowEscapeKey: false, // Disallow closing the alert with the escape key
-                            showCancelButton: false, // Hide the cancel button
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = '/survey';
-                            }
-                        })
-                    },
-                    error: function (data) {
-                        errors = data.responseJSON.errors;
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                allowOutsideClick: false, // Disallow clicking outside the alert to close
+                                allowEscapeKey: false, // Disallow closing the alert with the escape key
+                                showCancelButton: false, // Hide the cancel button
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/survey';
+                                }
+                            })
+                        },
+                        error: function (data) {
+                            errors = data.responseJSON.errors;
 
-                        for (error in errors){
-                            i = 0;
-                            if (errors.hasOwnProperty(error)) {
-                                if(error.includes('survey'))
-                                {
-                                    i+= 1;
-                                    $('#question-'+i+'-input').addClass('is-invalid');
-                                }else{
-                                    $('#' + error+'-input').addClass('is-invalid');
+                            for (error in errors){
+                                i = 0;
+                                if (errors.hasOwnProperty(error)) {
+                                    if(error.includes('survey'))
+                                    {
+                                        i+= 1;
+                                        $('#question-'+i+'-input').addClass('is-invalid');
+                                    }else{
+                                        $('#' + error+'-input').addClass('is-invalid');
+                                    }
                                 }
                             }
-                        }
 
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: data.responseJSON.message?? data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    },
-                });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.responseJSON.message?? data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        },
+                    })
+                )
             })
 
 
