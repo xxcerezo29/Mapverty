@@ -16,7 +16,7 @@ class UsersController extends Controller
 {
     public function getUsers(Request $request){
         $users = [];
-        if($request->role == 'Developer'){
+        if(\auth()->user()->hasRole('Developer')){
             $users = User::role(['Developer', 'Super Admin', 'Teacher'])->get();
         }else{
             $users = User::role(['Super Admin', 'Teacher'])->get();
@@ -28,7 +28,7 @@ class UsersController extends Controller
                 $role = $role[0];
                 return $role;
             })->addColumn('Actions', function($row){
-                $btn = '<div data-id="'.$row->id.'"> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>';
+                $btn = \auth()->user()->id !== $row->id?'<div data-id="'.$row->id.'"> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>' : '';
 
                 return $btn;
             })->rawColumns(['Actions'])

@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Mail;
 
 class SurveyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:students', ['except' => ['getStudent', 'store', 'verifyEmail', 'verifyEmailCode', 'verifyOTP', 'changeEmail', 'storeChangeEmail']]);
+    }
     public function getStudent(Request $request){
         $validated = $request->validate([
             'student_number' => 'required'

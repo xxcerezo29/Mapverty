@@ -40,9 +40,6 @@
             ajax: {
                 url: '{{$url}}',
                 type: 'GET',
-                header: {
-                    'Authorization': 'Bearer  '+getCookie('authToken'),
-                },
                 data: {
 
                 },

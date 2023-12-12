@@ -23,9 +23,6 @@ class Doughnut{
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: url,
-                header: {
-                  'Authorization': 'Bearer  '+getCookie('authToken'),
-                },
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -107,9 +104,6 @@ class Line{
             $.ajax({
                 url: url,
                 type: 'GET',
-                header: {
-                    'Authorization': 'Bearer  '+getCookie('authToken'),
-                },
                 dataType: 'json',
                 success: function (data) {
                     resolve(data);
@@ -184,9 +178,6 @@ class Bar{
             $.ajax({
                 url: url,
                 type: 'GET',
-                header: {
-                    'Authorization': 'Bearer  '+getCookie('authToken'),
-                },
                 dataType: 'json',
                 success: function (data) {
                     resolve(data);
