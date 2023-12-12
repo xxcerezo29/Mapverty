@@ -1,4 +1,16 @@
 
+function getCookie(name) {
+    const cookieArray = document.cookie.split(';'); // Split cookies into an array
+
+    for (let cookie of cookieArray) {
+        const [cookieName, cookieValue] = cookie.split('=').map(c => c.trim());
+
+        if (cookieName === name) {
+            return decodeURIComponent(cookieValue);
+        }
+    }
+    return null; // Return null if the cookie is not found
+}
 class Doughnut{
     constructor(elementId, options, id) {
         this.id = id;
@@ -11,6 +23,9 @@ class Doughnut{
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: url,
+                header: {
+                  'Authorization': 'Bearer  '+getCookie('authToken'),
+                },
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -92,6 +107,9 @@ class Line{
             $.ajax({
                 url: url,
                 type: 'GET',
+                header: {
+                    'Authorization': 'Bearer  '+getCookie('authToken'),
+                },
                 dataType: 'json',
                 success: function (data) {
                     resolve(data);
@@ -166,6 +184,9 @@ class Bar{
             $.ajax({
                 url: url,
                 type: 'GET',
+                header: {
+                    'Authorization': 'Bearer  '+getCookie('authToken'),
+                },
                 dataType: 'json',
                 success: function (data) {
                     resolve(data);

@@ -22,12 +22,27 @@
 
 @section('js')
 <script>
+    function getCookie(name) {
+        const cookieArray = document.cookie.split(';'); // Split cookies into an array
+
+        for (let cookie of cookieArray) {
+            const [cookieName, cookieValue] = cookie.split('=').map(c => c.trim());
+
+            if (cookieName === name) {
+                return decodeURIComponent(cookieValue);
+            }
+        }
+        return null; // Return null if the cookie is not found
+    }
     $(function () {
         $('#{{$id}}').DataTable({
             processing: true,
             ajax: {
                 url: '{{$url}}',
                 type: 'GET',
+                header: {
+                    'Authorization': 'Bearer  '+getCookie('authToken'),
+                },
                 data: {
 
                 },
