@@ -94,10 +94,6 @@ Route::group(['prefix' => 'survey'], function (){
 }
 );
 
-Route::get('/test', function (){
-    return new \App\Mail\OTPmail(123456);
-});
-
 
 
 
