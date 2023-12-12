@@ -26,7 +26,7 @@ class UsersController extends Controller
                 $role = $role[0];
                 return $role;
             })->addColumn('Actions', function($row){
-                $btn = auth()->user()->id != $row->id ? '<div data-id="'.$row->id.'"> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>' : 'My Account';
+                $btn = '<div data-id="'.$row->id.'"> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>';
 
                 return $btn;
             })->rawColumns(['Actions'])
@@ -103,7 +103,6 @@ class UsersController extends Controller
 
 
         try {
-            if(Auth::user()->hasRole('Developer|Super Admin')){
                 $user = User::find($id);
                 if($user == null){
                     return response()->json([
@@ -115,9 +114,6 @@ class UsersController extends Controller
                 return response()->json([
                     'message' => 'User successfully deleted!',
                 ]);
-            }else {
-                throw new \Exception('You are not authorized to delete a user!');
-            }
         }catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
