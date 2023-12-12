@@ -12,9 +12,9 @@ use Nette\Utils\Random;
 
 class UsersController extends Controller
 {
-    public function getUsers(){
+    public function getUsers(Request $request){
         $users = [];
-        if(auth()->user()->hasRole('Developer')){
+        if($request->role == 'Developer'){
             $users = User::role(['Developer', 'Super Admin', 'Teacher'])->get();
         }else{
             $users = User::role(['Super Admin', 'Teacher'])->get();
