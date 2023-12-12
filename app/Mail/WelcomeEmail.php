@@ -29,7 +29,7 @@ class WelcomeEmail extends Mailable implements shouldQueue
      * Build the message.
      */
     public function build(){
-        return $this->view('emails.password')
+        return $this->view('emails.Password')
             ->subject('Welcome to the MaPverty System')
             ->with([
                 'name' => $this->user->name,
