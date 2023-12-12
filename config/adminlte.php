@@ -297,14 +297,14 @@ return [
         [
             'text'        => 'Dashboard',
             'url'         => '/',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-chart-line',
             'label_color' => 'success',
             'role'        => 'Developer|Super Admin|Teacher',
         ],
         [
             'text'        => 'Questions',
             'url'         => '/questions',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'far fa-question-circle',
             'label_color' => 'success',
             'active' => ['questions', 'questions/*'],
             'role'        => 'Developer|Super Admin',
@@ -312,7 +312,7 @@ return [
         [
             'text'        => 'Malnutrition',
             'url'         => '/malnutrition',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-heartbeat',
             'label_color' => 'success',
             'active' => ['malnutrition', 'malnutrition/*'],
             'role'        => 'Developer|Super Admin|Teacher',
@@ -320,7 +320,7 @@ return [
         [
             'text'        => 'Poverty',
             'url'         => '/poverty',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-coins',
             'label_color' => 'success',
             'active' => ['poverty', 'poverty/*'],
             'role'        => 'Developer|Super Admin|Teacher',
@@ -328,7 +328,7 @@ return [
         [
             'text'        => 'First Generation Students',
             'url'         => '/firstgeneration',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-user-graduate',
             'label_color' => 'success',
             'active' => ['firstgeneration', 'firstgeneration/*'],
             'role'        => 'Developer|Super Admin|Teacher',
@@ -336,7 +336,7 @@ return [
         [
             'text'        => 'Students',
             'url'         => '/students',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-users',
             'label_color' => 'success',
             'active' => ['students', 'students/*'],
             'role'        => 'Developer|Super Admin|Teacher',
@@ -344,7 +344,7 @@ return [
         [
             'text'        => 'Map',
             'url'         => '/map',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-map-marked-alt',
             'label_color' => 'success',
             'active' => ['map', 'map/*'],
             'role'        => 'Developer|Super Admin|Teacher',
@@ -352,7 +352,7 @@ return [
         [
             'text'        => 'Users',
             'url'         => '/users',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-users-cog',
             'label_color' => 'success',
             'active' => ['users', 'users/*'],
             'role'        => 'Developer|Super Admin',
@@ -360,7 +360,7 @@ return [
         [
             'text'        => 'Import or Export',
             'url'         => '/import-export',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-file-import',
             'label_color' => 'success',
             'active' => ['import-export', 'import-export/*'],
             'role'        => 'Developer|Super Admin',
