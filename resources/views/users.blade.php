@@ -19,7 +19,7 @@
 @section('content')
     <x-datatable-component id="user" :data="$data_display" :columns="$columns" addBtnText="Add User" url="/api/users" addUrl="addUser" removeUrl="/api/users/">
     </x-datatable-component>
-    <x-modal-component id="addUser" datatable="user" title="Add User" isForm="true" action="/api/users" method="post" submitBtnText=""  >
+    <x-modal-component id="addUser" datatable="user" title="Add User" isForm="true" action="/api/users?role=Super Admin" method="post" submitBtnText=""  >
         <x-input-component title="Name" id="name-input" placeholder="Enter Name" isRequired="true"/>
         <x-input-component title="Email" id="email-input" placeholder="Enter Email" isRequired="true"/>
         @role('Developer')
