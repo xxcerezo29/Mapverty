@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStudentNew;
 use App\Http\Requests\UpdateStudent;
+use App\Mail\OTPmail;
 use App\Models\Answer;
 use App\Models\HouseholdInformation;
 use App\Models\PersonalInformation;
@@ -12,6 +13,7 @@ use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class SurveyController extends Controller
 {
@@ -38,6 +40,9 @@ class SurveyController extends Controller
                 $otp = new Otp();
                 $code = $otp->generate($student->student_number, 6, 10);
 
+                Mail::to($student->email)->send(new OTPmail($code->token));
+
+
                 return response()->json([
                     'title' => 'Student Found',
                     'status' => 'success',
@@ -63,6 +68,9 @@ class SurveyController extends Controller
 
             $otp = new Otp();
             $code = $otp->generate($student->student_number, 6, 10);
+
+            Mail::to($student->email)->send(new OTPmail($code->token));
+
 
             // emailing
 
@@ -291,6 +299,9 @@ class SurveyController extends Controller
 
                 $generated = $otp->generate($validated['student_number'], 6, 10);
 
+                Mail::to($validated['email'])->send(new OTPmail($generated->token));
+
+
                 return response()->json([
                     'title' => 'OTP Sent',
                     'status' => 'success',
@@ -322,6 +333,8 @@ class SurveyController extends Controller
         try {
             $otp = new Otp();
             $generated = $otp->generate($validated['student_number'], 6, 10);
+
+            Mail::to($validated['email'])->send(new OTPmail($generated->token));
 
             return response()->json([
                 'title' => 'OTP Sent',
@@ -491,6 +504,8 @@ class SurveyController extends Controller
 
             $otp = new Otp();
             $generated = $otp->generate($validated['student_number'], 6, 10);
+
+            Mail::to($emailValidated['email'])->send(new OTPmail($generated->token));
 
             return response()->json([
                 'title' => 'OTP Sent',
