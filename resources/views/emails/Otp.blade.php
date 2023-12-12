@@ -4,7 +4,7 @@
 
     To verify your email address, please use the following One Time Password
 
-    here the Verification Code: <strong>{{ $verification_code }}</strong>
+    here the Verification Code: <strong>{{ $otp }}</strong>
 
     Do not share this OTP with anyone. MaPverty takes yours information security very seriously.
     MaPverty will never ask you to disclose or verify your OTP. If you receive a suspicious email
