@@ -45,7 +45,7 @@ return [
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
 
-//            'verify_peer'       => true,
+            'verify_peer'       => true,
         ],
 
         'ses' => [
