@@ -334,7 +334,7 @@ class SurveyController extends Controller
             $otp = new Otp();
             $generated = $otp->generate($validated['student_number'], 6, 10);
 
-            Mail::to($validated['email'])->send(new OTPmail($generated->token));
+            Mail::to($validated['email'])->send(new \App\Mail\OTP($generated->token));
 
             return response()->json([
                 'title' => 'OTP Sent',

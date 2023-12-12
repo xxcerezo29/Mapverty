@@ -9,12 +9,11 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OTPmail extends Mailable implements shouldQueue
+class OTP extends Mailable implements shouldQueue
 {
     use Queueable, SerializesModels;
 
     public $otp;
-
     /**
      * Create a new message instance.
      */
@@ -22,21 +21,36 @@ class OTPmail extends Mailable implements shouldQueue
     {
         $this->otp = $otp;
     }
-
+    /**
+     * Get the message envelope.
+     */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Student Email Verification',
-
+            subject: 'One Time Password',
         );
     }
 
-    public function content(){
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
         return new Content(
-            markdown: 'emails.Otp',
+            markdown: 'emails.otp',
             with: [
                 'otp' => $this->otp,
             ],
         );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

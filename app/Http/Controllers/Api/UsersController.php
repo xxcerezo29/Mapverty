@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewUser;
 use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -56,8 +57,7 @@ class UsersController extends Controller
 
             //send to email
 
-            Mail::to($user->email)->send(new WelcomeEmail($user, $random_password));
-
+            Mail::to($user->email)->send(new NewUser($random_password));
             $user->assignRole($request->role);
 
             DB::commit();
