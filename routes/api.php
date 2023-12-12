@@ -114,8 +114,6 @@ Route::group([], function (){
         Route::put('/{id}', [\App\Http\Controllers\Api\UsersController::class, 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\Api\UsersController::class, 'delete']);
     });
-
-
 });
 
 
