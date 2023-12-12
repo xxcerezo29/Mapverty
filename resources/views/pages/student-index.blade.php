@@ -44,40 +44,53 @@
                         'X-CSRF-TOKEN': token
                     }
                 });
-                $.ajax({
-                    url: '/api/survey/',
-                    type: 'GET',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-
-                        Swal.fire({
-                            icon: data.status,
-                            title: data.title,
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            if(data.hasSurvey === false){
-                                if(data.hasEmail === false){
-                                    window.location.href = '/survey/email?student_number='+data.student.student_number;
-                                }else {
-                                    window.location.href = '/survey/otp?student_number='+data.student.student_number;
-                                }
-                            }
-                        });
-                    },
-                    error: function (data) {
-                        console.log(data);
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.responseJSON.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                Swal.fire({
+                    title: 'Please Wait',
+                    text: 'We are checking your information',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    onOpen: () => {
+                        Swal.showLoading();
                     }
-                });
+                }).then(
+                    $.ajax({
+                        url: '/api/survey/',
+                        type: 'GET',
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
+                            Swal.close();
+                            Swal.fire({
+                                icon: data.status,
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                if(data.hasSurvey === false){
+                                    if(data.hasEmail === false){
+                                        window.location.href = '/survey/email?student_number='+data.student.student_number;
+                                    }else {
+                                        window.location.href = '/survey/otp?student_number='+data.student.student_number;
+                                    }
+                                }
+                            });
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.responseJSON.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    })
+                );
             });
         });
     </script>
