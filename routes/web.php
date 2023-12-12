@@ -179,18 +179,20 @@ Route::group(['prefix' => 'api', 'middleware' => ['auth']], function (){
     });
 });
 
-Route::group(['prefix' => 'survey'], function (){
-    Route::get('/', [\App\Http\Controllers\Api\SurveyController::class, 'getStudent']);
-    Route::put('/', [\App\Http\Controllers\Api\SurveyController::class, 'update']);
-    Route::post('/', [\App\Http\Controllers\Api\SurveyController::class, 'store']);
-    Route::post('/email', [\App\Http\Controllers\Api\SurveyController::class, 'EmailVerify']);
-    Route::post('/otp', [\App\Http\Controllers\Api\SurveyController::class, 'CodeEmailVerify']);
-    Route::post('/verify-otp', [\App\Http\Controllers\Api\SurveyController::class, 'verifyOTP']);
-    ROute::post('/verify-email', [\App\Http\Controllers\Api\SurveyController::class, 'verifyEmail']);
-    Route::post('/verify-email-code', [\App\Http\Controllers\Api\SurveyController::class, 'verifyEmailCode']);
-    Route::post('/logout', [\App\Http\Controllers\Api\SurveyController::class, 'logout']);
-    Route::get('/verifyChangeEmail', [\App\Http\Controllers\Api\SurveyController::class, 'changeEmail']);
-    Route::post('/verifyChangeEmail', [\App\Http\Controllers\Api\SurveyController::class, 'storeChangeEmail']);
+Route::group(['prefix' => 'api'], function (){
+    Route::group(['prefix'=> 'survey'], function (){
+        Route::get('/', [\App\Http\Controllers\Api\SurveyController::class, 'getStudent']);
+        Route::put('/', [\App\Http\Controllers\Api\SurveyController::class, 'update']);
+        Route::post('/', [\App\Http\Controllers\Api\SurveyController::class, 'store']);
+        Route::post('/email', [\App\Http\Controllers\Api\SurveyController::class, 'EmailVerify']);
+        Route::post('/otp', [\App\Http\Controllers\Api\SurveyController::class, 'CodeEmailVerify']);
+        Route::post('/verify-otp', [\App\Http\Controllers\Api\SurveyController::class, 'verifyOTP']);
+        ROute::post('/verify-email', [\App\Http\Controllers\Api\SurveyController::class, 'verifyEmail']);
+        Route::post('/verify-email-code', [\App\Http\Controllers\Api\SurveyController::class, 'verifyEmailCode']);
+        Route::post('/logout', [\App\Http\Controllers\Api\SurveyController::class, 'logout']);
+        Route::get('/verifyChangeEmail', [\App\Http\Controllers\Api\SurveyController::class, 'changeEmail']);
+        Route::post('/verifyChangeEmail', [\App\Http\Controllers\Api\SurveyController::class, 'storeChangeEmail']);
+    });
 }
 );
 
