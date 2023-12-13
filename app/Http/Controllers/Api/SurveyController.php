@@ -19,7 +19,7 @@ class SurveyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:students', ['except' => ['getStudent', 'store', 'verifyEmail', 'verifyEmailCode', 'verifyOTP', 'changeEmail', 'storeChangeEmail']]);
+        $this->middleware('auth:students', ['except' => ['getStudent', 'EmailVerify', 'store', 'verifyEmail', 'verifyEmailCode', 'verifyOTP', 'changeEmail', 'storeChangeEmail']]);
     }
     public function getStudent(Request $request){
         $validated = $request->validate([
