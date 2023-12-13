@@ -49,7 +49,7 @@ class Student extends Authenticatable implements MustVerifyEmail
         return $bmi;
     }
     public function firstGeneration(){
-        $question = Question::where('question', 'First Generation Student')->first();
+        $question = Question::where('question', 'Are you a first Generation? (first to attend college among siblings)')->first();
         if(!$question){
             return 'Empty';
         }

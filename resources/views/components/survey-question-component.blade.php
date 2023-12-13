@@ -43,24 +43,9 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">₱</span>
                     </div>
-                    <input type="text" class="x-input-component form-control form-control-border" id="question-{{$question->id}}-input">
+                    <input type="number" class="x-input-component form-control form-control-border" id="question-{{$question->id}}-input">
                 </div>
             </div>
-            @pushonce('js')
-                <script>
-                    $(function (){
-                        $('#question-{{$question->id}}-input').inputmask("currency", {
-                            radixPoint: ".",
-                            groupSeparator: ",",
-                            digits: 2,
-                            autoGroup: true,
-                            prefix: '', //Space after $, this will not truncate the first character.
-                            rightAlign: false,
-                            oncleared: function () { self.Value(''); }
-                        });
-                    });
-                </script>
-            @endpushonce
         @endif
         @break
 @endswitch
