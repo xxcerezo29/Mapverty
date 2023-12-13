@@ -11,13 +11,15 @@ class SurveyQuestionComponent extends Component
     public $question;
     public $choices;
     public $type;
+    public $isMoney;
     /**
      * Create a new component instance.
      */
-    public function __construct($question, $choices = [])
+    public function __construct($question, $choices = [], $isMoney = false)
     {
         $this->question = $question;
         $this->choices = $choices;
+        $this->isMoney = $isMoney;
     }
 
     /**

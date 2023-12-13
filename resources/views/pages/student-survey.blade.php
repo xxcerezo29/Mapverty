@@ -139,7 +139,8 @@
     <h1>Survey</h1>
     <hr>
     @foreach($questions as $question)
-        <x-survey-question-component :choices="$question->choices" :question="$question"></x-survey-question-component>
+        @php($isMoney = $question->question === 'Family Monthly income')
+        <x-survey-question-component :choices="$question->choices" :question="$question" :isMoney="$isMoney"></x-survey-question-component>
     @endforeach
 
     <div class="row justify-content-between">

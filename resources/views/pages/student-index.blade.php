@@ -34,6 +34,9 @@
 @pushonce('js')
     <script>
         $(function(){
+
+            $('#student_number-input').inputmask('9{2}-9{1,6}')
+
             $('#submit_BTN').on('click', function (event) {
                 event.preventDefault();
                 var token = $('meta[name="csrf-token"]').attr('content');
@@ -96,3 +99,4 @@
     </script>
 @endpushonce
 @section('plugins.Sweetalert2', true)
+@section('plugins.inputmask', true)

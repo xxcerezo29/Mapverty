@@ -19,6 +19,7 @@ class InputComponent extends Component
     public $value;
     public $customValidation;
     public $isHidden;
+
     /**
      * Create a new component instance.
      */
@@ -34,6 +35,7 @@ class InputComponent extends Component
         $this->value = $value;
         $this->customValidation = $customValidation;
         $this->isHidden = !($isHidden === 'false');
+
     }
 
     /**

@@ -19,7 +19,7 @@
 @section('content')
     <x-datatable-component id="user" :data="$data_display" :columns="$columns" addBtnText="Add User" url="/api/users" addUrl="addUser" removeUrl="/api/users/">
     </x-datatable-component>
-    <x-modal-component id="addUser" datatable="user" title="Add User" isForm="true" action="/api/users?role=Super Admin" method="post" submitBtnText=""  >
+    <x-modal-component id="addUser" datatable="user" title="Add User" isForm="true" action="/api/users?role" method="post" submitBtnText=""  >
         <x-input-component title="Name" id="name-input" placeholder="Enter Name" isRequired="true"/>
         <x-input-component title="Email" id="email-input" placeholder="Enter Email" isRequired="true"/>
         @role('Developer')
@@ -29,7 +29,22 @@
             @endrole
 {{--        <x-select-component title="Type" id="type-input" placeholder="Enter Type" isRequired="true" :options="$options" />--}}
     </x-modal-component>
+    <x-modal-component id="ChangeUserEmail" datatable="user" title="Edit User" isForm="true" action="/api/users/update-email" method="post" submitBtnText="changeEmail">
+
+        <x-input-component isHidden="true" title="User Id" id="userid-input" placeholder="User Id" isRequired="true"/>
+        <x-input-component title="Email" id="email-input" placeholder="Enter Email" isRequired="true"/>
+    </x-modal-component>
 @stop
 @section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true)
 @section('plugins.DatatablesPlugins', true)
+
+@pushonce('js')
+    <script>
+        $('#ChangeUserEmail').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var userid = button.data('id') // Extract info from data-* attributes
+            $('#userid-input').val(userid);
+        })
+    </script>
+@endpushonce
