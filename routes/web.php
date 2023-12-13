@@ -202,7 +202,7 @@ Route::group(['prefix' => 'api'], function (){
 );
 
 Route::get('/test', function (){
-    return view('vendor.adminlte.auth.passwords.email', ['token' => 'test']);
+    return view('vendor.adminlte.auth.passwords.reset', ['token' => 'test']);
 }
 );
 
