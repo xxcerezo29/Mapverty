@@ -126,21 +126,6 @@ Route::group(['prefix' => 'api', 'middleware' => ['auth']], function (){
         }
     );
 
-    Route::group(['prefix' => 'address'], function (){
-        Route::group(
-            [
-                'prefix' => 'regions',
-            ], function (){
-            Route::get('/', [\App\Http\Controllers\Api\AddressController::class, 'getRegions']);
-        });
-
-        Route::get('/provinces/{adm1_pcode}', [\App\Http\Controllers\Api\AddressController::class, 'getProvinces']);
-        Route::get('/municipalities/{adm2_pcode}', [\App\Http\Controllers\Api\AddressController::class, 'getMunicipalities']);
-        Route::get('/barangays/{adm3_pcode}', [\App\Http\Controllers\Api\AddressController::class, 'getBarangays']);
-
-
-    }
-    );
 
     Route::group(['prefix' => 'import-export'], function (){
         Route::post('/import', [\App\Http\Controllers\Api\ImportExportController::class, 'import']);
@@ -176,6 +161,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['auth']], function (){
         Route::post('/', [\App\Http\Controllers\Api\UsersController::class, 'store']);
         Route::put('/{id}', [\App\Http\Controllers\Api\UsersController::class, 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\Api\UsersController::class, 'delete']);
+        Route::post('/update-email', [\App\Http\Controllers\Api\UsersController::class, 'updateEmail']);
     });
 });
 
@@ -193,6 +179,30 @@ Route::group(['prefix' => 'api'], function (){
         Route::get('/verifyChangeEmail', [\App\Http\Controllers\Api\SurveyController::class, 'changeEmail']);
         Route::post('/verifyChangeEmail', [\App\Http\Controllers\Api\SurveyController::class, 'storeChangeEmail']);
     });
+
+    Route::group(['prefix' => 'address'], function (){
+        Route::group(
+            [
+                'prefix' => 'regions',
+            ], function (){
+            Route::get('/', [\App\Http\Controllers\Api\AddressController::class, 'getRegions']);
+        });
+
+        Route::get('/provinces/{adm1_pcode}', [\App\Http\Controllers\Api\AddressController::class, 'getProvinces']);
+        Route::get('/municipalities/{adm2_pcode}', [\App\Http\Controllers\Api\AddressController::class, 'getMunicipalities']);
+        Route::get('/barangays/{adm3_pcode}', [\App\Http\Controllers\Api\AddressController::class, 'getBarangays']);
+
+
+    }
+    );
+
+
+
+}
+);
+
+Route::get('/test', function (){
+    return view('vendor.adminlte.auth.passwords.email', ['token' => 'test']);
 }
 );
 

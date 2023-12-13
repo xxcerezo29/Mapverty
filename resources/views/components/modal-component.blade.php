@@ -17,7 +17,7 @@
 
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" id="submit_btn" class="btn btn-success">Submit</button>
+                        <button type="button" id="{{$submitBtnText}}" class="btn btn-success">Submit</button>
                     </div>
                 </form>
             @else
@@ -26,14 +26,14 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="submit_btn" class="btn btn-success">Submit</button>
+                    <button type="button" id="{{$submitBtnText}}" class="btn btn-success">Submit</button>
                 </div>
             @endif
         </div>
     </div>
 </div>
 
-@pushonce('js')
+@push('js')
     <script>
         $(function(){
             var input;
@@ -48,7 +48,7 @@
             })
 
             @if($isForm === 'true')
-                $('#submit_btn').on('click',function (){
+                $('#{{$submitBtnText}}').on('click',function (){
                 var data = {};
                 var token = $('meta[name="csrf-token"]').attr('content');
 
@@ -62,57 +62,84 @@
                     }
                 });
 
-                $.ajax({
-                    url: '{{$action}}',
-                    type: '{{$method}}',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-
-                        $('#{{$id}}').modal('hide');
-
-
-                        @if($datatable)
-                        $('#{{$datatable}}').DataTable().ajax.reload();
-                        @endif
-
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    allowOutsideClick: false, // Disallow clicking outside the alert to close
+                    allowEscapeKey: false, // Disallow closing the alert with the escape key
+                    showCancelButton: true, // Show the cancel button
+                    confirmButtonText: 'Yes, submit it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.close();
                         Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.message,
+                            title: 'Please Wait',
+                            text: 'Processing Data',
                             allowOutsideClick: false, // Disallow clicking outside the alert to close
                             allowEscapeKey: false, // Disallow closing the alert with the escape key
                             showCancelButton: false, // Hide the cancel button
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                @if($reloadWhenSubmit == true)
-                                location.reload();
-                                @endif
-
-                                Swal.close();
-
+                            showConfirmButton: false, // Show the confirm button
+                            onOpen: () => {
+                                Swal.showLoading();
                             }
-                        })
+                        }).then(
+                            $.ajax({
+                                url: '{{$action}}',
+                                type: '{{$method}}',
+                                data: data,
+                                success: function (data) {
+                                    console.log(data);
+
+                                    $('#{{$id}}').modal('hide');
 
 
-                    },
-                    error: function (data) {
-                        errors = data.responseJSON.errors;
+                                    @if($datatable)
+                                    $('#{{$datatable}}').DataTable().ajax.reload();
+                                    @endif
 
-                        console.log(data);
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: data.title,
+                                        text: data.message,
+                                        allowOutsideClick: false, // Disallow clicking outside the alert to close
+                                        allowEscapeKey: false, // Disallow closing the alert with the escape key
+                                        showCancelButton: false, // Hide the cancel button
+                                        confirmButtonText: 'OK'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            @if($reloadWhenSubmit == true)
+                                            location.reload();
+                                            @endif
 
-                        for (error in errors){
-                            if (errors.hasOwnProperty(error)) {
-                                $('#' + error+'-input').addClass('is-invalid');
-                            }
-                        }
+                                            Swal.close();
 
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.statusText,
-                            text: data.responseJSON.message,
-                        })
+                                        }
+                                    })
+
+
+                                },
+                                error: function (data) {
+                                    errors = data.responseJSON.errors;
+
+                                    console.log(data);
+
+                                    for (error in errors){
+                                        if (errors.hasOwnProperty(error)) {
+                                            $('#' + error+'-input').addClass('is-invalid');
+                                        }
+                                    }
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: data.statusText,
+                                        text: data.responseJSON.message,
+                                    })
+                                }
+                            })
+                        )
                     }
                 })
             })
@@ -121,4 +148,4 @@
 
         })
     </script>
-@endpushonce
+@endpush

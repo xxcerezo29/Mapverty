@@ -29,7 +29,7 @@ class ModalComponent extends Component
         $this->isForm = $isForm;
         $this->action = $action?? '';
         $this->method = $method?? '';
-        $this->submitBtnText = $submitBtnText?? '';
+        $this->submitBtnText = $submitBtnText === ''? 'submit_btn': $submitBtnText;
         $this->datatable = $datatable?? '';
         $this->static = !($static === 'false');
         if($this->isForm === false){

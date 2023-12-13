@@ -28,7 +28,7 @@ class UsersController extends Controller
                 $role = $role[0];
                 return $role;
             })->addColumn('Actions', function($row){
-                $btn = \auth()->user()->id !== $row->id?'<div data-id="'.$row->id.'"> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>' : '';
+                $btn = \auth()->user()->id !== $row->id?'<div data-id="'.$row->id.'"> <button id="ediUser" data-id="'.$row->id.'" data-toggle="modal" data-target="#ChangeUserEmail">Change Email</button> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>' : '';
 
                 return $btn;
             })->rawColumns(['Actions'])
@@ -68,6 +68,31 @@ class UsersController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function updateEmail(Request $request)
+    {
+        $request->validate([
+            'userid' => 'required',
+            'email' => 'required|unique:users,email,' . $request->userid,
+        ]);
+
+        try {
+            $user = User::find($request->userid);
+
+            $user->update([
+                'email' => $request->email,
+            ]);
+
+            return response()->json([
+                'message' => 'User email successfully updated!',
+                'user' => $user
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ]);

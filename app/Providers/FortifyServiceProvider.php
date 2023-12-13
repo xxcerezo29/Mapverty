@@ -51,6 +51,13 @@ class FortifyServiceProvider extends ServiceProvider
             return view('vendor.adminlte.auth.verify-email');
         });
 
+        Fortify::resetPasswordView(function ($request) {
+            return view('vendor.adminlte.auth.passwords.', ['request' => $request]);
+        });
+        Fortify::requestPasswordResetLinkView(function () {
+            return view('vendor.adminlte.auth.passwords.email');
+        });
+
 
     }
 }

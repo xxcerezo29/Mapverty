@@ -31,9 +31,36 @@
         </div>
         @break
     @case('4')
-        <div class="form-group">
-            <label for="question-{{$question->id}}">{{ $question->question }} <span class="text-danger"> {{ $customValidation?? '' }}</span> <span class="text-danger">*</span></label>
-            <input type="Number" class="x-input-component form-control form-control-border " id="question-{{$question->id}}-input">
-        </div>
+        @if($isMoney === false)
+            <div class="form-group">
+                <label for="question-{{$question->id}}">{{ $question->question }} <span class="text-danger"> {{ $customValidation?? '' }}</span> <span class="text-danger">*</span></label>
+                <input type="Number" class="x-input-component form-control form-control-border " id="question-{{$question->id}}-input">
+            </div>
+        @else
+            <div class="form-group">
+                <label for="question-{{$question->id}}">{{ $question->question }} <span class="text-danger"> {{ $customValidation?? '' }}</span> <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">₱</span>
+                    </div>
+                    <input type="text" class="x-input-component form-control form-control-border" id="question-{{$question->id}}-input">
+                </div>
+            </div>
+            @pushonce('js')
+                <script>
+                    $(function (){
+                        $('#question-{{$question->id}}-input').inputmask("currency", {
+                            radixPoint: ".",
+                            groupSeparator: ",",
+                            digits: 2,
+                            autoGroup: true,
+                            prefix: '', //Space after $, this will not truncate the first character.
+                            rightAlign: false,
+                            oncleared: function () { self.Value(''); }
+                        });
+                    });
+                </script>
+            @endpushonce
+        @endif
         @break
 @endswitch
