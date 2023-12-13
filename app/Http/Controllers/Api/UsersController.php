@@ -78,7 +78,7 @@ class UsersController extends Controller
     {
         $request->validate([
             'userid' => 'required',
-            'email' => 'required|unique:users,email,' . $request->userid,
+            'email-update' => 'required|unique:users,email,' . $request->userid,
         ]);
 
         try {
