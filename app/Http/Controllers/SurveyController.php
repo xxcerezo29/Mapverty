@@ -41,6 +41,8 @@ class SurveyController extends Controller
         $occupation = config('enums.occupation');
         $education = config('enums.educational_attainment');
 
+
+
         return view('pages.student-survey', compact([ 'occupation', 'education', 'programs', 'years', 'sex', 'gender','civilStatus', 'nationality', 'questions']));
     }
 

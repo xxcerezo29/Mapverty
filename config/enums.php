@@ -21,7 +21,9 @@ return [
         '0' => 'Prefer not to say',
     ],
     'gender' => [
-        '0' => 'Not Applicable',
+        '0' => 'Prefer not to say',
+        '1' => 'Masculine',
+        '2' => 'Feminine'
     ],
     'civilstatus' => [
         '1' => 'Single',
