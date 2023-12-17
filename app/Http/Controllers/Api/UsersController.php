@@ -57,7 +57,7 @@ class UsersController extends Controller
 
             //send to email
 
-            Mail::to($user->email)->send(new NewUser($random_password));
+            Mail::to($user->email)->send(new NewUser($random_password, $user->name));
             $user->assignRole($request->role);
 
             DB::commit();

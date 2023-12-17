@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Dashboard')
+@section('title', 'Malnutrition Status')
 @section('content_header')
     <div class="container-fluid">
         <div class="row">

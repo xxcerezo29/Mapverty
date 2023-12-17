@@ -209,10 +209,9 @@ Route::group(['prefix' => 'api'], function (){
 
 Route::post('/request-password-reset', [\App\Http\Controllers\Api\Auth\PasswordResetLinkController::class, 'store']);
 
-Route::get('/test', function (){
-    return view('vendor.adminlte.auth.passwords.reset', ['token' => 'test']);
-}
-);
+Route::get('/test', function () {
+    return new \App\Mail\OTP(123456);
+});
 
 
 
