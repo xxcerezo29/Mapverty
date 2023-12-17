@@ -17,11 +17,13 @@
     <span>
         @role('Developer')
             Developer
-        @elseif('Super Admin')
+        @endrole
+        @role('Super Admin')
             Super Admin
-        @else
+        @endrole
+        @role('Teacher')
             Teacher
-            @endrole
+        @endrole
     </span>
 
     {{-- Navbar right links --}}

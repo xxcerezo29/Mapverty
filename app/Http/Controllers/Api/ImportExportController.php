@@ -47,17 +47,21 @@ class ImportExportController extends Controller
                         }
                         $targetStudent = Student::whereYear('created_at', is_null($dateInfo)? date('Y') : date('Y', $row['created_at']))->where('student_number', $row['student_number'])->first();
                         if (is_null($targetStudent)) {
-                            $region = Region::select('adm1_pcode')->where('adm1_en', $row['region'])->first();
-                            $province = Province::select('adm2_pcode')->where('adm2_en', $row['province'])->first();
-                            $municipality = Municipality::select('adm3_pcode')->where('adm3_en', $row['municipality'])->first();
-                            $barangay = Barangay::select('adm4_pcode')->where('adm4_en', $row['barangay'])->first();
+                            $address = null;
+                            if($row['region'] !== '' && $row['province'] !== '' && $row['municipality'] !== '' && $row['barangay'] !== ''){
+                                $region = Region::select('adm1_pcode')->where('adm1_en', $row['region'])->first();
+                                $province = Province::select('adm2_pcode')->where('adm2_en', $row['province'])->first();
+                                $municipality = Municipality::select('adm3_pcode')->where('adm3_en', $row['municipality'])->first();
+                                $barangay = Barangay::select('adm4_pcode')->where('adm4_en', $row['barangay'])->first();
 
-                            $address = Address::create([
-                                'region' => $region->adm1_pcode,
-                                'province' => $province->adm2_pcode,
-                                'municipality' => $municipality->adm3_pcode,
-                                'barangay' => $barangay->adm4_pcode,
-                            ]);
+                                $address = Address::create([
+                                    'region' => $region->adm1_pcode,
+                                    'province' => $province->adm2_pcode,
+                                    'municipality' => $municipality->adm3_pcode,
+                                    'barangay' => $barangay->adm4_pcode,
+                                ]);
+                            }
+
 
                             $sex = array_search($row['sex'], config('enums.sex'));
                             $civilstatus = array_search($row['civilstatus'], config('enums.civilstatus'));
@@ -71,29 +75,45 @@ class ImportExportController extends Controller
                             $father_education = array_search($row['father_education'], config('enums.educational_attainment'));
                             $mother_education = array_search($row['mother_education'], config('enums.educational_attainment'));
 
-                            $birthDate = \DateTime::createFromFormat('d-m-y', $row['birthdate']);
+                            $birthDate = $row['birthdate']? \DateTime::createFromFormat('d-m-y', $row['birthdate']) : null;
                             $info = PersonalInformation::create([
                                 'firstname' => $row['firstname'],
                                 'middlename' => $row['middlename'],
                                 'lastname' => $row['lastname'],
-                                'birthdate' => $birthDate->format('Y-m-d H:i:s'),
-                                'sex' => $sex,
-                                'gender' => $gender,
-                                'address' => $address->id,
-                                'civilstatus' => $civilstatus,
-                                'cellphone' => $row['cellphone'],
-                                'weight' => $row['weight'],
-                                'height' => $row['height'],
+                                'sex' => array_search($row['sex'], config('enums.sex'))?? '',
+                                'gender' => array_search($row['gender'], config('enums.gender'))?? '',
+                                'civilstatus' => array_search($row['civilstatus'], config('enums.civilstatus'))?? '',
                             ]);
+                            if($row['birthdate'])
+                                $info->birthdate = $birthDate? $birthDate->format('Y-m-d H:i:s') : ' ';
+                            if($address)
+                                $info->address = $address? $address->id : ' ';
+                            if($row['cellphone'] )
+                                $info->cellphone = $row['cellphone']?? ' ';
+                            if($row['weight'] && $row['height'])
+                            {
+                                $info->weight = $row['weight']?? ' ';
+                                $info->height = $row['height']?? ' ';
+                            }
+
+
+
+                            $info->save();
 
                             $student = Student::create([
                                 'student_number' => $row['student_number'],
-                                'email' => $row['email'],
-                                'program' => $program,
-                                'year' => $year,
-                                'section' => $row['section'],
+                                'program' => array_search($row['program'], config('enums.programs'))?? '',
+                                'year' => array_search($row['year'], config('enums.years'))?? '',
                                 'personal_information' => $info->id,
                             ]);
+                            if($row['lrn'])
+                                $student->lrn = $row['lrn']?? '';
+                            if($row['email'])
+                                $student->email = $row['email']?? '';
+                            if($row['section'])
+                                $student->section = $row['section']?? '';
+
+                            $student->save();
 
                             if(!is_null($dateInfo)){
                                 $student->created_at = date('Y-m-d H:i:s', $dateInfo);
@@ -101,7 +121,7 @@ class ImportExportController extends Controller
                             }
 
                             $questions = Question::with('choices')->get();
-                            if($row['survey'] !== ''){
+                            if($row['surveys'] !== ''){
                                 $answers = explode('-', $row['surveys']);
                                 foreach ($answers as $answer){
                                     $answerss = json_decode($answer, true);
@@ -109,16 +129,19 @@ class ImportExportController extends Controller
                                     {
                                         $targetQuestion = $questions->where('question', $answerss['question'])->first();
 
-                                        $answerSaved = $student->answers()->create([
-                                            'question_id' => $targetQuestion->id,
-                                            'answer' => $answerss['answer'],
-                                        ]);
-
-                                        $dateAnswer = [];
-                                        if (isset($answerss['created_at']))
+                                        if($targetQuestion)
                                         {
-                                            $answerSaved->created_at = date('Y-m-d H:i:s', $answerss['created_at']);
-                                            $answerSaved->save();
+                                            $answerSaved = $student->answers()->create([
+                                                'question_id' => $targetQuestion->id,
+                                                'answer' => $answerss['answer'],
+                                            ]);
+
+                                            $dateAnswer = [];
+                                            if (isset($answerss['created_at']))
+                                            {
+                                                $answerSaved->created_at = date('Y-m-d H:i:s', $answerss['created_at']);
+                                                $answerSaved->save();
+                                            }
                                         }
                                     }
                                 }

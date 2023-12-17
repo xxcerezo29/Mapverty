@@ -110,7 +110,10 @@ class MalnutritionController extends Controller
         })->addColumn('sectionString', function ($student){
             return config('enums.programs.'.$student->program).' '.$student->year.'-'.$student->section;
         })->addColumn('ACTION', function ($student){
-            return '<a href="/students/view/' . $student->student_number . '" class="btn btn-primary btn-sm">View</a>';
+            if(!auth()->user()->hasRole('Teacher')){
+                return '<a href="/students/view/' . $student->student_number . '" class="btn btn-primary btn-sm">View</a>';
+            }
+            return '';
         })->rawColumns(['ACTION'])->toJson();
     }
 

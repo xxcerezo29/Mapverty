@@ -37,7 +37,7 @@ class OTP extends Mailable implements shouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.otp',
+            markdown: 'emails.Otp',
             with: [
                 'otp' => $this->otp,
             ],

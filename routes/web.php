@@ -83,6 +83,12 @@ Route::group(['middleware' => 'auth:web'], function (){
 //        Route::get('/{id}', [\App\Http\Controllers\UsersController::class, 'edit']);
     });
 
+    Route::group(['prefix' => 'profile'], function (){
+        Route::get('/', [\App\Http\Controllers\UsersProfileController::class, 'index']);
+        Route::put('/password-change', [\App\Http\Controllers\UsersProfileController::class, 'changePassword']);
+        Route::put('/info-change', [\App\Http\Controllers\UsersProfileController::class, 'updateInfo']);
+    });
+
 
 });
 
@@ -200,6 +206,8 @@ Route::group(['prefix' => 'api'], function (){
 
 }
 );
+
+Route::post('/request-password-reset', [\App\Http\Controllers\Api\Auth\PasswordResetLinkController::class, 'store']);
 
 Route::get('/test', function (){
     return view('vendor.adminlte.auth.passwords.reset', ['token' => 'test']);

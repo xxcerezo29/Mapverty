@@ -36,8 +36,12 @@ class PovertyController extends Controller
             ->addColumn('povertyStatus', function ($student){
                 return $student->povertyStatus();
             })
-->addColumn('ACTION', function ($student){
-                $btn = '<div data-id="'.$student->id.'"> <a href="/students/view/'.$student->student_number.'" class="edit btn btn-info btn-sm">View</a></div>';
+            ->addColumn('ACTION', function ($student){
+                $btn = '';
+                if(!auth()->user()->hasRole('Teacher')) {
+                    $btn = '<div data-id="' . $student->id . '"> <a href="/students/view/' . $student->student_number . '" class="edit btn btn-info btn-sm">View</a></div>';
+                }
+
                 return $btn;
             })
             ->rawColumns(['ACTION'])

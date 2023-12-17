@@ -150,6 +150,8 @@
     <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js'></script>
     <script src='/vendor/bundle.js'></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
     <script>
         class ChoroplethMap{
             constructor(mapId) {
@@ -157,6 +159,7 @@
                 this.geojson = null;
                 this.info = L.control();
                 this.labels = [];
+                this.densityValues = null;
 
                 this.setupMap();
             }
@@ -167,30 +170,47 @@
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(this.map);
 
-
-                this.loadGeoJSON();
+                this.getColor = null;
 
                 this.createInfoControl();
-                this.createLegendControler(this);
-                this.map.on('zoomend', function () {
-                    // Get the current zoom level
-                    var zoomLevel = this.map.getZoom();
-
-                    // Check the zoom level and hide/show labels accordingly
-                    for (var i = 0; i < this.labels.length; i++) {
-                        var label = this.labels[i];
-                        if (zoomLevel < 7) {
-                            label.setOpacity(0); // hide label
-                        } else {
-                            label.setOpacity(1); // show label
-                        }
-                    }
-                }.bind(this));
-
+                this.loadInitialGeoJSON();
                 this.EP();
 
-                this.map.on('browser-print-start', function (e){
-                    L.legendControl({position: 'bottomright'}).addTo(e.printMap);
+
+
+            }
+            loadInitialGeoJSON(){
+                this.loadGeoJSON().then(({minValue, maxValue, dataRetireve, class_interval}) => {
+
+                    this.CreateGEOJSON(dataRetireve);
+                    this.createLegendControler(this, minValue, maxValue, class_interval);
+
+                    this.map.on('zoomend', function () {
+                        // Get the current zoom level
+                        var zoomLevel = this.map.getZoom();
+
+                        // Check the zoom level and hide/show labels accordingly
+                        for (var i = 0; i < this.labels.length; i++) {
+                            var label = this.labels[i];
+                            if (zoomLevel < 7) {
+                                label.setOpacity(0); // hide label
+                            } else {
+                                label.setOpacity(1); // show label
+                            }
+                        }
+                    }.bind(this));
+
+                    this.map.on('browser-print-start', function (e){
+                        L.legendControl({position: 'bottomright'}).addTo(e.printMap);
+                    })
+                }).catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ooop, Unfortunately!',
+                        text: error,
+                        confirmButtonText: "Ok",
+
+                    });
                 })
             }
             EP(){
@@ -220,34 +240,53 @@
             }
 
             loadGeoJSON(){
-                $('#mapOverlay').show();
-                $('#map-title').empty();
-                $('#map').hide();
-                $.ajax({
-                    url: "{{route('spatial.index')}}",
-                    type: 'GET',
-                    data: {
-                        layer: $('#layer').val(),
-                        municipality: $('#municity').val()?? null,
-                        Selector: '1'
-                    },
-                    dataType: 'json',
-                    success: (dataRetireve) => {
-                        this.data = JSON.parse(dataRetireve.data);
-                        this.CreateGEOJSON(dataRetireve);
-                    },
-                    error: (data) => {
-                        $('#mapOverlay').show();
-                        $('#map').show();
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Ooop, Unfortunately!',
-                            text: data.responseJSON.message,
-                            confirmButtonText: "Ok",
+                return new Promise((resolve, reject) => {
+                    $('#mapOverlay').show();
+                    $('#map-title').empty();
+                    $('#map').hide();
+                    $.ajax({
+                        url: "{{route('spatial.index')}}",
+                        type: 'GET',
+                        data: {
+                            layer: $('#layer').val(),
+                            municipality: $('#municity').val()?? null,
+                            Selector: '1'
+                        },
+                        dataType: 'json',
+                        success: (dataRetireve) => {
+                            this.data = JSON.parse(dataRetireve.data);
 
-                        });
-                    }
-                });
+                            this.densityValues = this.data.features.map(feature => feature.properties.density);
+
+                            const minValue = _.min(this.densityValues);
+                            const maxValue = _.max(this.densityValues);
+
+                            const interval_width = (maxValue - minValue) / 5;
+                            const class_interval = [minValue, (minValue + interval_width).toFixed(0), (minValue + (interval_width * 2)).toFixed(0), (minValue + (interval_width * 3)).toFixed(0), (minValue + (interval_width * 4)).toFixed(0)]
+
+                            console.log(class_interval)
+
+                            this.getColor = (d) => {
+                                return d > class_interval[4] ? '#800026' :
+                                    d > class_interval[3] ? '#BD0026' :
+                                        d > class_interval[2] ? '#FC4E2A' :
+                                            d > class_interval[1] ? '#FED976' :
+                                                '#FFEDA0';
+                            }
+
+                            this.CreateGEOJSON(dataRetireve);
+                            resolve({ minValue, maxValue, dataRetireve, class_interval });
+                        },
+                        error: (data) => {
+                            $('#mapOverlay').show();
+                            $('#map').show();
+
+                            const errorMessage = data.responseJSON.message || 'An error occurred while fetching data.';
+                            reject(errorMessage);
+                        }
+                    });
+                })
+
             }
 
             CreateGEOJSON(dataRetireve){
@@ -279,13 +318,14 @@
                     fillOpacity: 0.7
                 };
             }
-            getColor(d) {
-                return d > 100 ? '#800026' :
-                    d > 75 ? '#BD0026' :
-                        d > 50 ? '#FC4E2A' :
-                            d > 25 ? '#FED976' :
-                                '#FFEDA0';
-            }
+            // getColor(d, class_interval) {
+            //     console.log(this.class_interval);
+            //     return d > 100 ? '#800026' :
+            //         d > 75 ? '#BD0026' :
+            //             d > 50 ? '#FC4E2A' :
+            //                 d > 25 ? '#FED976' :
+            //                     '#FFEDA0';
+            // }
 
             EachFeature(feature, layer) {
                 if(feature.properties.density != 0)
@@ -358,27 +398,47 @@
                 this.info.addTo(this.map);
             }
 
-            createLegendControler(refThis){
-                L.LegendControl = L.Control.extend({
-                    onAdd: function (map){
-                        var div = L.DomUtil.create('div', 'info legend');
-                        var grades = [0, 25, 50, 75,100];
-                        var level = ['None or Very Low', 'Low', 'Moderate', 'High', 'Very High'];
+            createLegendControler(refThis, minValue, maxValue, class_interval){
+                if(this.legendControl){
+                    this.map.removeControl(this.legendControl);
+                }
 
-                        div.innerHTML += '<p class="text-center">Student Below Poverty Line Count </p><br>';
-                        for (var i = 0; i < grades.length; i++) {
-                            div.innerHTML +=
-                                '<i style="background:' + refThis.getColor(grades[i] + 1) + '"></i> ' +
-                                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '     ' +  level[i] + '<br>' : '+' + '     ' +  level[i] + '<br>');
-                        }
-                        return div;
-                    }
+
+                this.legendControl = L.control({
+                    position: 'bottomright'
                 })
 
-                L.legendControl = function (options) {
-                    return new L.LegendControl(options);
+                this.legendControl.onAdd = function (map){
+                    var div = L.DomUtil.create('div', 'info legend');
+
+                    div.innerHTML = '';
+
+                    if(minValue === 0 && maxValue === 0)
+                    {
+                        div.innerHTML += '<p class="text-center">No Data Available</p><br>';
+                        return div;
+
+                    }else{
+                        var level = ['None or Very Low', 'Low', 'Moderate', 'High', 'Very High'];
+
+                        console.log(class_interval)
+
+                        div.innerHTML += '<p class="text-center">Student Below Poverty Line Count </p><br>';
+                        for (var i = 0; i < class_interval.length; i++) {
+                            div.innerHTML +=
+                                '<i style="background:' + refThis.getColor(class_interval[i] + 1) + '"></i> ' +
+                                class_interval[i] + (class_interval[i + 1] ? '&ndash;' + class_interval[i + 1] + '     ' +  level[i] + '<br>' : '+' + '     ' +  level[i] + '<br>');
+                        }
+                    }
+
+
+                    return div;
                 }
-                L.legendControl({position: 'bottomright'}).addTo(this.map);
+
+                // L.legendControl = function (options) {
+                //     return new L.LegendControl(options);
+                // }
+                this.legendControl.addTo(this.map);
             }
 
             onClear(){
@@ -401,13 +461,13 @@
             else
             {
                 $('#forLayerBarangay').hide();
-                choromap.loadGeoJSON();
+                choromap.loadInitialGeoJSON();
             }
         })
         const  choromap = new ChoroplethMap('map');
 
         $('#municity').on('change', function (){
-            choromap.loadGeoJSON();
+            choromap.loadInitialGeoJSON();
         })
     </script>
 @stop

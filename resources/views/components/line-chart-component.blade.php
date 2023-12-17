@@ -15,14 +15,14 @@
                 <canvas id="{{$id}}-linechart" height="200"></canvas>
                 <h4 id="warning-{{$id}}-text"></h4>
             </div>
-            <div class="d-flex flex-row justify-content-end">
-                      <span class="mr-2">
-                        <i class="fas fa-square text-danger"></i> Below Poverty Line
-                      </span>
-                <span>
-                            <i class="fas fa-square text-success"></i> Above Poverty Line
-                        </span>
-            </div>
+{{--            <div class="d-flex flex-row justify-content-end">--}}
+{{--                      <span class="mr-2">--}}
+{{--                        <i class="fas fa-square text-danger"></i> Below Poverty Line--}}
+{{--                      </span>--}}
+{{--                <span>--}}
+{{--                            <i class="fas fa-square text-success"></i> Above Poverty Line--}}
+{{--                        </span>--}}
+{{--            </div>--}}
             <p><span class="text-danger">Note: </span>Summary graph from previous to current data of students below and above the poverty line</p>
         </div>
     </div>
