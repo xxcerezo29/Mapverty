@@ -22,8 +22,11 @@ class FirstGenerationStudentController extends Controller
                 return $student->getFullNameAttribute();
             })->addColumn('sectionString', function ($student){
                 return config('enums.programs.'.$student->program).' '.$student->year.'-'.$student->section;
-            })->addColumn('ACTION', function ($student){
-                $btn = '<div data-id="'.$student->id.'"> <a href="/students/view/'.$student->student_number.'" class="edit btn btn-info btn-sm">View</a></div>';
+            })->addColumn('ACTION', function ($student) {
+                $btn = '';
+                if (!auth()->user()->hasRole('Teacher')) {
+                    $btn = '<div data-id="' . $student->id . '"> <a href="/students/view/' . $student->student_number . '" class="edit btn btn-info btn-sm">View</a></div>';
+                }
                 return $btn;
             })
             ->rawColumns(['ACTION'])

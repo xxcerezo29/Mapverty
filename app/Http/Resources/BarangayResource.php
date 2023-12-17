@@ -20,7 +20,7 @@ class BarangayResource extends JsonResource
         $students = Student::with('info')
             ->with('info.Address')
             ->whereHas('info.Address', function ($query){
-                $query->where('municipality', $this->adm4_pcode);
+                $query->where('barangay', $this->adm4_pcode);
             })->get();
 
         $count = $students->filter(function ($student){
@@ -34,13 +34,14 @@ class BarangayResource extends JsonResource
                 'gid' => $this->gid,
                 'adm1_en' => $this->adm1_en,
                 'adm1_pcode' => $this->adm1_pcode,
-                'adm2_en' => $this->adm1_en,
-                'adm2_pcode' => $this->adm1_pcode,
-                'adm3_en' => $this->adm1_en,
-                'adm3_pcode' => $this->adm1_pcode,
-                'adm4_en' => $this->adm1_en,
-                'adm4_pcode' => $this->adm1_pcode,
+                'adm2_en' => $this->adm2_en,
+                'adm2_pcode' => $this->adm2_pcode,
+                'adm3_en' => $this->adm3_en,
+                'adm3_pcode' => $this->adm3_pcode,
+                'adm4_en' => $this->adm4_en,
+                'adm4_pcode' => $this->adm4_pcode,
                 'density' => $count,
+                'students' => $students->count(),
             ]
         ];
     }

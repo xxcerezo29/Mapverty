@@ -32,7 +32,7 @@
     <x-modal-component id="ChangeUserEmail" datatable="user" title="Edit User" isForm="true" action="/api/users/update-email" method="post" submitBtnText="changeEmail">
 
         <x-input-component isHidden="true" title="User Id" id="userid-input" placeholder="User Id" isRequired="true"/>
-        <x-input-component title="Email" id="email-input" placeholder="Enter Email" isRequired="true"/>
+        <x-input-component title="Email" id="email-update-input" placeholder="Enter Email" isRequired="true"/>
     </x-modal-component>
 @stop
 @section('plugins.Datatables', true)

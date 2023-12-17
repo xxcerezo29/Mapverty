@@ -49,7 +49,7 @@
             responsive: true,
             dom: 'Bfrtip',
             buttons: [
-                @if($addBtnText)
+                @if($addBtnText && auth()->user()->hasRole('Super Admin|Developer'))
                 {
                     'text': '{{ $addBtnText }}',
                     'className': 'btn btn-success',

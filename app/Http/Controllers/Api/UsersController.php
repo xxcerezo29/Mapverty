@@ -17,9 +17,9 @@ class UsersController extends Controller
     public function getUsers(Request $request){
         $users = [];
         if(\auth()->user()->hasRole('Developer')){
-            $users = User::role(['Developer', 'Super Admin', 'Teacher'])->get();
+            $users = User::role(['Developer', 'Super Admin', 'Teacher'])->where('id', '!=', $request->user()->id)->get();
         }else{
-            $users = User::role(['Super Admin', 'Teacher'])->get();
+            $users = User::role(['Super Admin', 'Teacher'])->where('id', $request->user()->id)->get();
         }
         return datatables()->of($users)
             ->addIndexColumn()
@@ -28,7 +28,7 @@ class UsersController extends Controller
                 $role = $role[0];
                 return $role;
             })->addColumn('Actions', function($row){
-                $btn = \auth()->user()->id !== $row->id?'<div data-id="'.$row->id.'"> <button id="ediUser" data-id="'.$row->id.'" data-toggle="modal" data-target="#ChangeUserEmail">Change Email</button> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>' : '';
+                $btn = \auth()->user()->id !== $row->id?'<div data-id="'.$row->id.'"> <button id="ediUser" class="btn btn-info btn-sm" data-id="'.$row->id.'" data-toggle="modal" data-target="#ChangeUserEmail">Change Email</button> <button onclick="remove('.$row->id.')" class="delete btn btn-danger btn-sm">Delete</button></div>' : '';
 
                 return $btn;
             })->rawColumns(['Actions'])
@@ -76,16 +76,16 @@ class UsersController extends Controller
 
     public function updateEmail(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'userid' => 'required',
-            'email' => 'required|unique:users,email,' . $request->userid,
+            'email-update' => 'required|unique:users,email,' . $request->userid,
         ]);
 
         try {
-            $user = User::find($request->userid);
+            $user = User::find($validated['userid']);
 
             $user->update([
-                'email' => $request->email,
+                'email' => $validated['email-update'],
             ]);
 
             return response()->json([

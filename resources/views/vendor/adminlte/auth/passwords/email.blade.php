@@ -18,7 +18,7 @@
         </div>
     @endif
 
-    <form action="{{ $password_email_url }}" method="post">
+    <form id="password_reset" action="{{ $password_email_url }}" method="post">
         @csrf
 
         {{-- Email field --}}
@@ -40,7 +40,7 @@
         </div>
 
         {{-- Send reset link button --}}
-        <button type="submit" class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
+        <button id="submit" type="button" class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
             <span class="fas fa-share-square"></span>
             {{ __('adminlte::adminlte.send_password_reset_link') }}
         </button>
@@ -48,3 +48,61 @@
     </form>
 
 @stop
+@section('plugins.Sweetalert2', true)
+@pushonce('js')
+    <script>
+        $('#submit').on('click', function (){
+            const data = $('#password_reset').serialize();
+
+            Swal.fire({
+                title: 'Please Wait',
+                text: 'We are checking your information',
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                onOpen: () => {
+                    Swal.showLoading();
+                }
+            }).then(
+                $.ajax({
+                    url: '{{ $password_email_url }}',
+                    type: 'POST',
+                    data: data,
+                    success: function (data){
+                        console.log(data);
+                        Swal.close();
+                        if(data.title === 'Successful')
+                        {
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                            })
+                        }else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.message,
+                                showConfirmButton: false,
+                            })
+                        }
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.title,
+                            text: data.responseJSON.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                })
+            )
+        })
+    </script>
+@endpushonce
