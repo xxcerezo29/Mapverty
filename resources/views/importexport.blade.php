@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Student')
+@section('title', 'Import or Export Data')
 
 @section('content_header')
     <div class="container-fluid">

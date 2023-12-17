@@ -14,12 +14,14 @@ class NewUser extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $password;
+    public $name;
     /**
      * Create a new message instance.
      */
-    public function __construct($password)
+    public function __construct($password, $name)
     {
         $this->password = $password;
+        $this->name = $name;
     }
 
     /**
@@ -41,6 +43,7 @@ class NewUser extends Mailable implements ShouldQueue
             markdown: 'emails.new',
             with: [
                 'password' => $this->password,
+                'name' => $this->name,
             ],
         );
     }
