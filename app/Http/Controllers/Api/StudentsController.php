@@ -32,7 +32,7 @@ class StudentsController extends Controller
                 $btn = '';
                 if(!auth()->user()->hasRole('Teacher'))
                 {
-                    $btn = '<div data-id="'.$row->id.'">  <a href="/students/'.$row->student_number.'" class="edit btn btn-primary btn-sm">Edit</a> <a href="/students/view/'.$row->student_number.'" class="edit btn btn-info btn-sm">View</a> <button onclick="remove(`'.$row->student_number.'`)" class="delete btn btn-danger btn-sm">Delete</button></div>';
+                    $btn = '<div data-id="'.$row->id.'">   <a href="/students/view/'.$row->student_number.'" class="edit btn btn-info btn-sm">View</a> <button onclick="remove(`'.$row->student_number.'`)" class="delete btn btn-danger btn-sm">Delete</button></div>';
                 }
 
                 return $btn;
