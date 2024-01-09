@@ -32,7 +32,7 @@ class StudentsController extends Controller
                 $btn = '';
                 if(!auth()->user()->hasRole('Teacher'))
                 {
-                    $btn = '<div data-id="'.$row->id.'"> <a href="/students/view/'.$row->student_number.'" class="edit btn btn-info btn-sm">View</a> <button onclick="remove(`'.$row->student_number.'`)" class="delete btn btn-danger btn-sm">Delete</button></div>';
+                    $btn = '<div data-id="'.$row->id.'">  <a href="/students/'.$row->student_number.'" class="edit btn btn-primary btn-sm">Edit</a> <a href="/students/view/'.$row->student_number.'" class="edit btn btn-info btn-sm">View</a> <button onclick="remove(`'.$row->student_number.'`)" class="delete btn btn-danger btn-sm">Delete</button></div>';
                 }
 
                 return $btn;
@@ -40,20 +40,7 @@ class StudentsController extends Controller
             ->toJson();
     }
 
-    public function editStudent($id, Request $request)
-    {
-        DB::beginTransaction();
-        try{
-            $student = Student::where("student_number",$id)->first();
-            if(is_null($student){
-               throw new Exception("Student not Found");
-            }
-        }catch(Exception $e)
-        {
-            DB::rollback();
-            return response()->json(['error' => $e->getMessage()]);
-        }
-    }
+    
     public function storeStudent(StoreStudent $request)
     {
         DB::beginTransaction();
