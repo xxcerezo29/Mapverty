@@ -10,7 +10,7 @@ class FirstGenerationStudentController extends Controller
 {
     public function getFirstGenerationStudent(Request $request)
     {
-        $firstGenerationStudent = \App\Models\Student::whereYear('created_at', date('Y'))->whereHas('info', function ($query) use($request) {
+        $firstGenerationStudent = \App\Models\Student::whereYear('created_at', "2023")->whereHas('info', function ($query) use($request) {
             $query->where('sex', $request->sex);
         })->get()->filter(function ($student){
             return $student->firstGeneration() == 'Yes';
@@ -34,7 +34,7 @@ class FirstGenerationStudentController extends Controller
     }
 
     public function getFirstGenerationStudentChart(){
-        $students = \App\Models\Student::whereYear('created_at', date('Y'))->get();
+        $students = \App\Models\Student::whereYear('created_at', "2023")->get();
         $filteredStudents = $students->filter(function ($student){
             return $student->firstGeneration() == 'Yes';
         });
