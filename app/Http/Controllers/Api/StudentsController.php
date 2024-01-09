@@ -40,6 +40,20 @@ class StudentsController extends Controller
             ->toJson();
     }
 
+    public function editStudent($id, Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            $student = Student::where("student_number",$id)->first();
+            if(is_null($student){
+               throw new Exception("Student not Found");
+            }
+        }catch(Exception $e)
+        {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
     public function storeStudent(StoreStudent $request)
     {
         DB::beginTransaction();
