@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class MalnutritionController extends Controller
 {
     public function getMalnutritionStatus(){
-        $students = \App\Models\Student::whereYear('created_at', date('Y'))->with('info')->whereHas('info', function ($query){
+        $students = \App\Models\Student::whereYear('created_at', "2023")->with('info')->whereHas('info', function ($query){
             $query->whereNotNull('weight')->whereNotNull('height');
         })->get();
 
@@ -74,7 +74,7 @@ class MalnutritionController extends Controller
 
         $bmiSelector = $request->bmi_selector;
 
-        $students = \App\Models\Student::whereYear('created_at', date('Y'))->with('info')->whereHas('info', function ($query){
+        $students = \App\Models\Student::whereYear('created_at', "2023")->with('info')->whereHas('info', function ($query){
             $query->whereNotNull('weight')->whereNotNull('height');
         })->get();
 
