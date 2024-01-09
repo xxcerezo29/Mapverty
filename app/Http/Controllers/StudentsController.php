@@ -52,7 +52,7 @@ class StudentsController extends Controller
         $sections = config('enums.sections');
 
 
-        return view('pages.edit-students', compact(['student', 'sex', 'gender', 'civilStatus', 'nationality', 'programs', 'years', 'sections']));
+        return view('pages.edit-student', compact(['student', 'sex', 'gender', 'civilStatus', 'nationality', 'programs', 'years', 'sections']));
 
     }
 
