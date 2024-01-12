@@ -105,7 +105,10 @@ class StudentListSheet implements FromCollection, WithMapping, WithTitle, WithHe
 
     public function title(): string
     {
-        return config('enums.programs.' . $this->program) . '-'.$this->filteredType.' '.$this->sex? config('enums.sex.'.$this->sex) : '' ;
+        if($this->sex === null)
+            return config('enums.programs.' . $this->program) . '-'.$this->filteredType;
+        else 
+            return config('enums.programs.' . $this->program) . '-'.$this->filteredType.' '.config('enums.sex.'.$this->sex);
     }
 
     public function headings(): array
