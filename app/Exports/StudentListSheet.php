@@ -40,14 +40,14 @@ class StudentListSheet implements FromCollection, WithMapping, WithTitle, WithHe
     public function collection()
     {
         if($this->exportType === 'list'){
-            $students = Student::whereYear('created_at', date('Y'))
+            $students = Student::whereYear('created_at', "2023")
                 ->where('program', $this->program)
                 ->where('year', $this->year)
                 ->get();
 
             return $students;
         }else if($this->exportType === 'firstgeneration'){
-            $students = Student::whereYear('created_at', date('Y'))
+            $students = Student::whereYear('created_at', "2023")
                 ->where('program', $this->program)
                 ->get();
             return $students->filter(function ($student) {
