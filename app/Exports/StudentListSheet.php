@@ -55,7 +55,7 @@ class StudentListSheet implements FromCollection, WithMapping, WithTitle, WithHe
             });
         }
             else{
-            $students = Student::whereYear('created_at', date('Y'))
+            $students = Student::whereYear('created_at',  "2023")
                 ->where('program', $this->program)
                 ->get();
             return $students->filter(function ($student){
