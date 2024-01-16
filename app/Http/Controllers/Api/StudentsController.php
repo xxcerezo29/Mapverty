@@ -103,6 +103,22 @@ class StudentsController extends Controller
                     'barangay' => $request->barangay,
                 ]);
             }
+            $info = PersonalInformation::find($student->personal_information);
+            if($info){
+                $info->update([
+                    'firstname' => $request->first_name,
+                    'middlename' => $request->middle_name,
+                    'lastname' => $request->last_name,
+                    'birthdate' => $request->birthdate,
+                    'sex' => $request->sex,
+                    'gender' => $request->gender,
+                    'weight' => $request->weight,
+                    'height' => $request->height,
+                    'civilstatus' => $request->civil_status,
+                    'cellphone' => $request->phone,
+                    'nationality' => $request->nationality,
+                ]);
+            }
             $student->update([
                 'lrn' => $request->lrn,
                 'student_number' => $request->student_number,

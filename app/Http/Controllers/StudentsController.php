@@ -31,6 +31,7 @@ class StudentsController extends Controller
         $civilStatus = config('enums.civilstatus');
         $nationality = config('nationality');
 
+
         $programs = config('enums.programs');
         $years = config('enums.years');
         $sections = config('enums.sections');
@@ -46,6 +47,8 @@ class StudentsController extends Controller
 
         $civilStatus = config('enums.civilstatus');
         $nationality = config('nationality');
+        $studentNationality = array_search($student->info->nationality, $nationality);
+        ($student->info->nationality);
 
         $programs = config('enums.programs');
         $years = config('enums.years');
