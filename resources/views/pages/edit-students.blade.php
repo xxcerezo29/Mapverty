@@ -107,7 +107,7 @@
         </div>
         <hr>
         <div class="row justify-content-between">
-            <button type="button" onclick="logout()" class="btn btn-default">Cancel</button>
+            <a type="button" href="/students" class="btn btn-default">Cancel</a>
             <button type="button"  id="submit-main_btn" class="btn btn-success">Submit</button>
 
         </div>
@@ -118,6 +118,7 @@
 @section('plugins.Select2', true)
 @section('js')
     <script>
+
         $(function ()
         {
             var token = $('meta[name="csrf-token"]').attr('content');
