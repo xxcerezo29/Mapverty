@@ -39,6 +39,7 @@ class StudentsController extends Controller
             ->toJson();
     }
 
+    
     public function storeStudent(StoreStudent $request)
     {
         DB::beginTransaction();

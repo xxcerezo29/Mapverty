@@ -139,15 +139,16 @@ class StudentSummarySheet implements FromCollection, WithTitle, WithHeadings,  W
 
     public function collection()
     {
-        $bsit1 = Student::where('program', 1)->where('year', 1)->whereYear('created_at', date('Y', strtotime('Y')))->get();
-        $bsit2= Student::where('program', 1)->where('year', 2)->whereYear('created_at', date('Y', strtotime('Y')))->get();
-        $bsit3= Student::where('program', 1)->where('year', 3)->whereYear('created_at', date('Y', strtotime('Y')))->get();
-        $bsit4= Student::where('program', 1)->where('year', 4)->whereYear('created_at', date('Y', strtotime('Y')))->get();
+        $bsit1 = Student::where('program', 1)->where('year', 1)->whereYear('created_at', "2023")->get();
+        
+        $bsit2= Student::where('program', 1)->where('year', 2)->whereYear('created_at', "2023")->get();
+        $bsit3= Student::where('program', 1)->where('year', 3)->whereYear('created_at', "2023")->get();
+        $bsit4= Student::where('program', 1)->where('year', 4)->whereYear('created_at', "2023")->get();
 
-        $bsa1 = Student::where('program', 2)->where('year', 1)->whereYear('created_at', date('Y', strtotime('Y')))->get();
-        $bsa2= Student::where('program', 2)->where('year', 2)->whereYear('created_at', date('Y', strtotime('Y')))->get();
-        $bsa3= Student::where('program', 2)->where('year', 3)->whereYear('created_at', date('Y', strtotime('Y')))->get();
-        $bsa4= Student::where('program', 2)->where('year', 4)->whereYear('created_at', date('Y', strtotime('Y')))->get();
+        $bsa1 = Student::where('program', 2)->where('year', 1)->whereYear('created_at', "2023")->get();
+        $bsa2= Student::where('program', 2)->where('year', 2)->whereYear('created_at', "2023")->get();
+        $bsa3= Student::where('program', 2)->where('year', 3)->whereYear('created_at', "2023")->get();
+        $bsa4= Student::where('program', 2)->where('year', 4)->whereYear('created_at', "2023")->get();
 
         $data = collect([
             [

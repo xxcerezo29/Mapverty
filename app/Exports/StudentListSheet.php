@@ -40,14 +40,14 @@ class StudentListSheet implements FromCollection, WithMapping, WithTitle, WithHe
     public function collection()
     {
         if($this->exportType === 'list'){
-            $students = Student::whereYear('created_at', date('Y'))
+            $students = Student::whereYear('created_at', "2023")
                 ->where('program', $this->program)
                 ->where('year', $this->year)
                 ->get();
 
             return $students;
         }else if($this->exportType === 'firstgeneration'){
-            $students = Student::whereYear('created_at', date('Y'))
+            $students = Student::whereYear('created_at', "2023")
                 ->where('program', $this->program)
                 ->get();
             return $students->filter(function ($student) {
@@ -55,7 +55,7 @@ class StudentListSheet implements FromCollection, WithMapping, WithTitle, WithHe
             });
         }
             else{
-            $students = Student::whereYear('created_at', date('Y'))
+            $students = Student::whereYear('created_at',  "2023")
                 ->where('program', $this->program)
                 ->get();
             return $students->filter(function ($student){
@@ -105,7 +105,10 @@ class StudentListSheet implements FromCollection, WithMapping, WithTitle, WithHe
 
     public function title(): string
     {
-        return config('enums.programs.' . $this->program) . '-'.$this->filteredType;
+        if($this->sex === null)
+            return config('enums.programs.' . $this->program) . '-'.$this->filteredType;
+        else 
+            return config('enums.programs.' . $this->program) . '-'.$this->filteredType.' '.config('enums.sex.'.$this->sex);
     }
 
     public function headings(): array

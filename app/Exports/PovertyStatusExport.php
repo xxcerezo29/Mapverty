@@ -133,7 +133,7 @@ class PovertyStatusSummarySheet implements FromCollection, WithTitle, WithHeadin
 
     public function collection()
     {
-        $students = Student::whereYear('created_at', date('Y'))->get();
+        $students = Student::whereYear('created_at', "2023")->get();
         $courseCount = 2; // Assuming there are 2 courses
         $yearCount = 5; // Assuming there are 5 years
 

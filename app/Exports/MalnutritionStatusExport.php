@@ -293,7 +293,7 @@ class MalnutritionSummarySheet implements FromCollection, WithHeadings, WithTitl
             8 => ['min' => 40],
         ];
 
-        $students = Student::whereYear('created_at', date('Y'))->get();
+        $students = Student::whereYear('created_at', "2023")->get();
 
         if(isset($bmiRanges[$filteredType])){
             $filter = $bmiRanges[$filteredType];

@@ -41,7 +41,7 @@ class FirstGenerationSummarySheet implements FromCollection, WithTitle, WithHead
 {
     public function collection()
     {
-        $students = \App\Models\Student::whereYear('created_at', date('Y'))->get();
+        $students = \App\Models\Student::whereYear('created_at', "2023")->get();
         return collect([
             [
                 'type' => 'Male',

@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class PovertyController extends Controller
 {
     public function getPovertyStatus(Request $request){
-        $students = \App\Models\Student::whereYear('created_at', date('Y'))
+        $students = \App\Models\Student::whereYear('created_at', "2023")
             ->get();
 
         $data = $students->filter(function ($student) use ($request){
@@ -48,7 +48,7 @@ class PovertyController extends Controller
             ->toJson();
     }
     public function getPovertyStatusDoughnut(){
-        $students = \App\Models\Student::whereYear('created_at', date('Y'))
+        $students = \App\Models\Student::whereYear('created_at', "2023")
             ->get();
 
         $belowPoverty = $students->filter(function ($student){
