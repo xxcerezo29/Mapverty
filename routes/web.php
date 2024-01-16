@@ -126,7 +126,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['auth']], function (){
         function (){
             Route::get('/', [\App\Http\Controllers\Api\StudentsController::class, 'getStudents']);
             Route::post('/', [\App\Http\Controllers\Api\StudentsController::class, 'storeStudent']);
-//        Route::put('/{student_number}', [\App\Http\Controllers\Api\StudentsController::class, 'editStudent']);
+            Route::put('/{student_number}', [\App\Http\Controllers\Api\StudentsController::class, 'updateStudent']);
             Route::delete('/{student_number}', [\App\Http\Controllers\Api\StudentsController::class, 'removeStudent']);
             Route::get('/export', [\App\Http\Controllers\Api\StudentsController::class, 'exportStudents']);
         }
