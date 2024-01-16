@@ -22,17 +22,16 @@ class StudentsController extends Controller
 
         return datatables()->of($students)
             ->addIndexColumn()
-            ->addColumn('fullname', function($row){
+            ->addColumn('fullname', function ($row) {
                 return $row->getFullNameAttribute();
             })
-            ->addColumn('Sections', function ($row){
-                return config('enums.programs.'.$row->program).' '.$row->year.'-'.$row->section;
+            ->addColumn('Sections', function ($row) {
+                return config('enums.programs.' . $row->program) . ' ' . $row->year . '-' . $row->section;
             })
-            ->addColumn('Actions', function($row){
+            ->addColumn('Actions', function ($row) {
                 $btn = '';
-                if(!auth()->user()->hasRole('Teacher'))
-                {
-                    $btn = '<div data-id="'.$row->id.'">   <a href="/students/view/'.$row->student_number.'" class="edit btn btn-info btn-sm">View</a> <button onclick="remove(`'.$row->student_number.'`)" class="delete btn btn-danger btn-sm">Delete</button></div>';
+                if (!auth()->user()->hasRole('Teacher')) {
+                    $btn = '<div data-id="' . $row->id . '"> <a href="/students/' . $row->student_number . '" class="edit btn btn-primary btn-sm">Edit</a> <a href="/students/view/' . $row->student_number . '" class="edit btn btn-info btn-sm">View</a> <button onclick="remove(`' . $row->student_number . '`)" class="delete btn btn-danger btn-sm">Delete</button></div>';
                 }
 
                 return $btn;
@@ -79,12 +78,45 @@ class StudentsController extends Controller
 
             DB::commit();
 
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['error' => $e->getMessage()]);
         }
 
         return response()->json(['message' => 'Student saved successfully.', 'data' => $student, 'title' => 'Success']);
+    }
+
+    public function updateStudent(StoreStudent $request)
+    {
+        try {
+            $student = Student::where('student_number', $request->student_number)->first();
+            if(!$student){
+                throw new \Exception('Student not found.', 404);
+            }
+            DB::beginTransaction();
+            $address = Address::find($student->info->address);
+            if($address){
+                $address->update([
+                    'region' => $request->region,
+                    'province' => $request->province,
+                    'municipality' => $request->city,
+                    'barangay' => $request->barangay,
+                ]);
+            }
+            $student->update([
+                'lrn' => $request->lrn,
+                'student_number' => $request->student_number,
+                'email' => $request->email,
+                'program' => $request->program,
+                'year' => $request->year,
+                'section' => $request->section,
+            ]);
+            DB::commit();
+
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     public function removeStudent($student_number)
